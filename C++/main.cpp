@@ -132,12 +132,12 @@ int main()
 {
 	string istr, key, chs, dummy;
 	while(1){
-		cout << "What yo want?  [E]ncrypt OR [D]ecode \n >>> ";
+		cout << "What yo want?  [E]ncrypt OR [D]ecode \n>>> ";
 		getline(cin, chs);
 		if (chs == "e"){
-			cout << " enter data \n >>> ";
+			cout << "data: ";
 			getline(cin, istr);
-			cout << " enter key \n >>> ";
+			cout << "key: ";
 			getline(cin, key);
 			vector<BYTE> xored = XORChiper(istr, key);
 			string encodedData = base64_encode(&xored[0], xored.size());
@@ -145,9 +145,9 @@ int main()
 			cout << "press Enter to continue"; getline(cin, dummy);
 			system("clear");
 		} else if (chs == "d"){
-			cout << " enter data \n >>> ";
+			cout << "data: ";
 			getline(cin, istr);
-			cout << " enter key \n >>> ";
+			cout << "key: ";
 			getline(cin, key);
 			vector<BYTE> decoded = base64_decode(istr);
 			vector<BYTE> xored = XORChiper(decoded, key);
