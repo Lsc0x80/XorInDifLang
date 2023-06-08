@@ -13,6 +13,7 @@ g++ -o xor main.cpp
 ```
 ## Rust
 ```
+cd Rust
 cargo run
 ```
 
