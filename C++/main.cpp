@@ -4,7 +4,7 @@
 
 using namespace std;
 
-//Базе64 енкрипт от сюда https://stackoverflow.com/questions/180947/base64-decode-snippet-in-c
+//Base64 encrypt from here https://stackoverflow.com/questions/180947/base64-decode-snippet-in-c
 typedef unsigned char BYTE;
 static const std::string base64_chars =
 	"ABCDEFGHIJKLMNOPQRSTUVWXYZ"
@@ -106,7 +106,7 @@ vector<BYTE> base64_decode(string const &encoded_string)
 	return ret;
 }
 
-// Переписал функцию, первоначальный вид функции: https://www.tutorialspoint.com/xor-cipher-in-cplusplus#
+// I rewrote the function, the original view is here https://www.tutorialspoint.com/xor-cipher-in-cplusplus#
 template <typename T>
 vector<BYTE> XORChiper(T originalString, string xorKey){
 	int j = 0;
@@ -121,14 +121,13 @@ vector<BYTE> XORChiper(T originalString, string xorKey){
 	return xored;
 }
 
-//Написал сам
 string bytes2string(vector<BYTE> input){
 	string ret;
 	for (int i = 0; i < input.size(); i++)
 		ret.push_back(input[i]);
 	return ret;
 }
-//Написал сам
+
 int main()
 {
 	string istr, key, chs, dummy;
