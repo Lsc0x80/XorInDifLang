@@ -11,7 +11,7 @@ def wait():
 	os.system('clear')
 while True:
 	print('What yo want? [E]ncrypt OR [D]ecode')
-	chs = input('>>>').lower()[0]
+	chs = input('>>> ').lower()[0]
 	if chs == 'e':
 		print(xor(input('data: '), input('key: '), encode=True))
 		wait()
