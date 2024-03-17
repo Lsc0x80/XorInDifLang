@@ -4,7 +4,6 @@
 
 using namespace std;
 
-//Base64 encrypt from here https://stackoverflow.com/questions/180947/base64-decode-snippet-in-c
 typedef unsigned char BYTE;
 static const std::string base64_chars =
 	"ABCDEFGHIJKLMNOPQRSTUVWXYZ"
@@ -16,17 +15,19 @@ static inline bool is_base64(BYTE c)
 	return (isalnum(c) || (c == '+') || (c == '/'));
 }
 
-string base64_encode(BYTE const *buf, unsigned int bufLen)
+string base64_encode(string const buf)
 {
 	string ret;
 	int i = 0;
 	int j = 0;
+	int k = 0;
+	unsigned int bufLen = buf.size();
 	BYTE char_array_3[3];
 	BYTE char_array_4[4];
 
 	while (bufLen--)
 	{
-		char_array_3[i++] = *(buf++);
+		char_array_3[i++] = buf[k++];
 		if (i == 3)
 		{
 			char_array_4[0] = (char_array_3[0] & 0xfc) >> 2;
@@ -60,14 +61,14 @@ string base64_encode(BYTE const *buf, unsigned int bufLen)
 	return ret;
 }
 
-vector<BYTE> base64_decode(string const &encoded_string)
+string base64_decode(string const &encoded_string)
 {
 	int in_len = encoded_string.size();
 	int i = 0;
 	int j = 0;
 	int in_ = 0;
 	BYTE char_array_4[4], char_array_3[3];
-	vector<BYTE> ret;
+	string ret;
 	while (in_len-- && (encoded_string[in_] != '=') && is_base64(encoded_string[in_]))
 	{
 		char_array_4[i++] = encoded_string[in_];
@@ -106,54 +107,38 @@ vector<BYTE> base64_decode(string const &encoded_string)
 	return ret;
 }
 
-// I rewrote the function, the original view is here https://www.tutorialspoint.com/xor-cipher-in-cplusplus#
-template <typename T>
-vector<BYTE> XORChiper(T originalString, string xorKey){
+string XORChiper(string originalString, string xorKey){
 	int j = 0;
-	vector<BYTE> xored;
-	int len = originalString.size();
-	for (int i = 0; i < len; i++)
+	string xored;
+	for (const char& c : originalString)
 	{
-		xored.push_back(originalString[i] ^ xorKey[j]);
+		xored.push_back(c ^ xorKey[j]);
 		if (j == xorKey.size() - 1) j = 0;
 		else j++;
 	}
-	return xored;
-}
 
-string bytes2string(vector<BYTE> input){
-	string ret;
-	for (int i = 0; i < input.size(); i++)
-		ret.push_back(input[i]);
-	return ret;
+	return xored;
 }
 
 int main()
 {
-	string istr, key, chs, dummy;
+	string istr, key, chs, ciphered;
 	while(1){
-		cout << "What yo want?  [E]ncrypt OR [D]ecode \n>>> ";
+		cout << "What you want?  [E]ncrypt OR [D]ecode \n>>> ";
 		getline(cin, chs);
-		if (chs == "e"){
-			cout << "data: ";
-			getline(cin, istr);
-			cout << "key: ";
-			getline(cin, key);
-			vector<BYTE> xored = XORChiper(istr, key);
-			string encodedData = base64_encode(&xored[0], xored.size());
-			cout << encodedData << endl;
-			cout << "press Enter to continue"; getline(cin, dummy);
-			system("clear");
-		} else if (chs == "d"){
-			cout << "data: ";
-			getline(cin, istr);
-			cout << "key: ";
-			getline(cin, key);
-			vector<BYTE> decoded = base64_decode(istr);
-			vector<BYTE> xored = XORChiper(decoded, key);
-			cout << bytes2string(xored)<<endl;
-			cout << "press Enter to continue"; getline(cin, dummy);
-			system("clear");
-		} else return 0;
+		char choose = tolower(chs[0]);
+		if (choose != 'e' && choose != 'd') exit(1);
+		
+		cout << "data: ";
+		getline(cin, istr);
+		cout << "key: ";
+		getline(cin, key);
+        
+		ciphered = (choose != 'd') ? base64_encode(XORChiper(istr, key)) : XORChiper(base64_decode(istr), key);
+        
+		cout << ciphered << endl;
+		cout << "press Enter to continue"; cin.get();
+		
 	}
+	return 0;
 }
